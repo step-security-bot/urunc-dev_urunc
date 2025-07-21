@@ -5,6 +5,9 @@ on:
     types:
       - labeled
 
+permissions:
+  contents: read
+
 jobs:
   pr-takeover:
     if: github.event.label.name == 'takeover'
@@ -26,10 +29,17 @@ jobs:
 
       - name: Extract PR info
         id: prinfo
+        shell: bash
+        env:
+          GITHUB_EVENT_PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_EVENT_PULL_REQUEST_HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          GITHUB_EVENT_PULL_REQUEST_HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
-          echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
-          echo "PR_HEAD_REPO=${{ github.event.pull_request.head.repo.full_name }}" >> $GITHUB_OUTPUT
-          echo "PR_HEAD_REF=${{ github.event.pull_request.head.ref }}" >> $GITHUB_OUTPUT
+          {
+            echo "PR_NUMBER=${GITHUB_EVENT_PULL_REQUEST_NUMBER}"
+            echo "PR_HEAD_REPO=${GITHUB_EVENT_PULL_REQUEST_HEAD_REPO}"
+            echo "PR_HEAD_REF=${GITHUB_EVENT_PULL_REQUEST_HEAD_REF}"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Create new local branch for takeover
         run: |
