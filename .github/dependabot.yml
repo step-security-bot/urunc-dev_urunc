@@ -20,3 +20,23 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+
+  - package-ecosystem: npm
+    directory: /.github/linters
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /deployment/urunc-deploy
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: daily
+
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: daily
